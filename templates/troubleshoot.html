@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - Farm Visit System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .troubleshoot-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .troubleshoot-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .troubleshoot-header h1 {
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+        .troubleshoot-header p {
+            color: #757575;
+        }
+        .troubleshoot-section {
+            margin-bottom: 30px;
+        }
+        .troubleshoot-section h2 {
+            color: #2E7D32;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .troubleshoot-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .troubleshoot-section ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        .troubleshoot-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .troubleshoot-section code {
+            background-color: #f5f5f5;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-info {
+            background-color: #E3F2FD;
+            border-left: 4px solid #1565C0;
+        }
+        .alert-warning {
+            background-color: #FFF3E0;
+            border-left: 4px solid #E65100;
+        }
+        .alert-success {
+            background-color: #E8F5E9;
+            border-left: 4px solid #2E7D32;
+        }
+        .alert-error {
+            background-color: #FFEBEE;
+            border-left: 4px solid #C62828;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2E7D32;
+        }
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="troubleshoot-container">
+        <div class="troubleshoot-header">
+            <h1><i class="fas fa-wrench"></i> Troubleshooting Guide</h1>
+            <p>Solutions for common issues with the Farm Visit System</p>
+        </div>
+        
+        <div class="troubleshoot-section">
+            <h2><i class="fas fa-file-pdf"></i> PDF Generation Issues</h2>
+            
+            <div class="alert alert-error">
+                <p><strong>Common Error:</strong> "Error generating PDF"</p>
+            </div>
+            
+            <p>This error occurs when the application encounters issues with WeasyPrint, which is used for generating PDF files. Follow these steps to resolve the issue:</p>
+            
+            <h3>Step 1: Verify WeasyPrint Installation</h3>
+            <p>First, check if WeasyPrint is properly installed in your Python environment:</p>
+            <ul>
+                <li>Open a command prompt or terminal</li>
+                <li>Run: <code>pip list | findstr WeasyPrint</code> (Windows) or <code>pip list | grep WeasyPrint</code> (Linux/macOS)</li>
+                <li>If not found or showing an older version, reinstall it with: <code>pip install WeasyPrint==59.0</code></li>
+            </ul>
+            
+            <h3>Step 2: Install Required Dependencies</h3>
+            <p>WeasyPrint requires some system libraries to function properly:</p>
+            <ul>
+                <li><strong>Windows:</strong> Install Microsoft Visual C++ Redistributable (both x86 and x64 versions)</li>
+                <li><strong>Linux:</strong> Install required libraries with:<br>
+                <code>apt-get install build-essential python3-dev python3-pip python3-setuptools python3-wheel python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info</code></li>
+                <li><strong>macOS:</strong> Install dependencies with:<br>
+                <code>brew install cairo pango gdk-pixbuf libffi</code></li>
+            </ul>
+            
+            <h3>Step 3: Restart the Application</h3>
+            <p>After making any changes:</p>
+            <ul>
+                <li>Restart the Flask application</li>
+                <li>Try generating a PDF again</li>
+            </ul>
+            
+            <div class="alert alert-info">
+                <p><strong>Note:</strong> WeasyPrint is a pure Python library that converts HTML/CSS to PDF without requiring external executables. If you're still experiencing issues, check the <a href="https://doc.courtbouillon.org/weasyprint/stable/first_steps.html" target="_blank">official WeasyPrint documentation</a> for troubleshooting.</p>
+            </div>
+        </div>
+        
+        <div class="troubleshoot-section">
+            <h2><i class="fas fa-lock"></i> Admin Access Issues</h2>
+            
+            <p>If you're having trouble accessing the admin page:</p>
+            
+            <div class="alert alert-info">
+                <p><strong>Default Login Credentials:</strong></p>
+                <ul>
+                    <li><strong>Username:</strong> admin</li>
+                    <li><strong>Password:</strong> farmapp123</li>
+                </ul>
+            </div>
+            
+            <p>If you need to reset the admin password:</p>
+            <ol>
+                <li>Open <code>app.py</code> in a text editor</li>
+                <li>Locate the <code>ADMIN_USERNAME</code> and <code>ADMIN_PASSWORD</code> variables near the top</li>
+                <li>Change the values as needed</li>
+                <li>Save the file and restart the application</li>
+            </ol>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="/" class="btn-secondary"><i class="fas fa-home"></i> Return to Home</a>
+            <a href="/admin" class="btn-primary"><i class="fas fa-tractor"></i> Go to Admin</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Visit Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-leaf"></i> Farm Visit Form</h1>
+            <p>Record details of your farm visit</p>
+        </header>
+
+        <form action="/submit" method="POST" enctype="multipart/form-data" id="farmVisitForm">
+            <!-- Progress bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">1</div>
+                    <div class="step" data-step="2">2</div>
+                    <div class="step" data-step="3">3</div>
+                    <div class="step" data-step="4">4</div>
+                    <div class="step" data-step="5">5</div>
+                </div>
+            </div>
+
+            <!-- Section 1: Farmer Details -->
+            <section class="form-section" id="section1">
+                <h2>1. Farmer Details</h2>
+                <div class="form-group">
+                    <label for="farmer_name">Farmer Name <span class="required">*</span></label>
+                    <input type="text" id="farmer_name" name="farmer_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="farm_id">Farm ID <span class="required">*</span></label>
+                    <input type="text" id="farm_id" name="farm_id" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Village/Location <span class="required">*</span></label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="gps_coordinates">GPS Coordinates</label>
+                    <div class="gps-container">
+                        <input type="text" id="gps_coordinates" name="gps_coordinates" placeholder="Latitude, Longitude">
+                        <button type="button" id="getLocationBtn" class="btn-secondary">
+                            <i class="fas fa-map-marker-alt"></i> Get Location
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="farm_size">Farm Size (acres) <span class="required">*</span></label>
+                    <input type="number" id="farm_size" name="farm_size" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Farm Type <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="farm_type" value="Crop" required>
+                            <span class="radio-label">Crop</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="farm_type" value="Livestock">
+                            <span class="radio-label">Livestock</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="farm_type" value="Mixed">
+                            <span class="radio-label">Mixed</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-next" data-next="2">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Section 2: Visit Details -->
+            <section class="form-section hidden" id="section2">
+                <h2>2. Visit Details</h2>
+                <div class="form-group">
+                    <label for="visit_date">Date of Visit <span class="required">*</span></label>
+                    <input type="date" id="visit_date" name="visit_date" required>
+                </div>
+                <div class="form-group">
+                    <label>Visit Type <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="visit_type" value="Routine" required>
+                            <span class="radio-label">Routine</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="visit_type" value="Emergency">
+                            <span class="radio-label">Emergency</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="visit_type" value="Followup">
+                            <span class="radio-label">Follow-up</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="officer_name">Officer Name <span class="required">*</span></label>
+                    <input type="text" id="officer_name" name="officer_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="time_spent">Time Spent (hours) <span class="required">*</span></label>
+                    <input type="number" id="time_spent" name="time_spent" step="0.5" min="0.5" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-prev" data-prev="1"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn-next" data-next="3">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Section 3: Observations -->
+            <section class="form-section hidden" id="section3">
+                <h2>3. Observations</h2>
+                <div class="form-group" id="cropSection">
+                    <label for="main_crops">Main Crops</label>
+                    <input type="text" id="main_crops" name="main_crops" placeholder="Separate multiple crops with commas">
+                </div>
+                <div class="form-group" id="cropStageSection">
+                    <label>Crop Stage</label>
+                    <select name="crop_stage" id="crop_stage">
+                        <option value="">Select crop stage</option>
+                        <option value="Planting">Planting</option>
+                        <option value="Vegetative">Vegetative</option>
+                        <option value="Flowering">Flowering</option>
+                        <option value="Fruiting">Fruiting</option>
+                        <option value="Harvesting">Harvesting</option>
+                    </select>
+                </div>
+                <div class="form-group" id="livestockSection">
+                    <label for="livestock_type">Livestock Type</label>
+                    <input type="text" id="livestock_type" name="livestock_type" placeholder="Separate multiple types with commas">
+                </div>
+                <div class="form-group" id="animalCountSection">
+                    <label for="animal_count">Number of Animals</label>
+                    <input type="number" id="animal_count" name="animal_count" min="0">
+                </div>
+                <div class="form-group" id="cropIssuesSection">
+                    <label>Crop Issues</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="crop_issues" value="Pests">
+                            <span class="checkbox-label">Pests</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="crop_issues" value="Diseases">
+                            <span class="checkbox-label">Diseases</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="crop_issues" value="Nutrient Deficiency">
+                            <span class="checkbox-label">Nutrient Deficiency</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="crop_issues" value="Poor Germination">
+                            <span class="checkbox-label">Poor Germination</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="crop_issues" value="Water Stress">
+                            <span class="checkbox-label">Water Stress</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="livestockIssuesSection">
+                    <label>Livestock Issues</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="livestock_issues" value="Illness">
+                            <span class="checkbox-label">Illness</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="livestock_issues" value="Parasites">
+                            <span class="checkbox-label">Parasites</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="livestock_issues" value="Malnutrition">
+                            <span class="checkbox-label">Malnutrition</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="livestock_issues" value="Poor Housing">
+                            <span class="checkbox-label">Poor Housing</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="photo">Photo Upload</label>
+                    <div class="file-upload">
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                        <label for="photo" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose a file
+                        </label>
+                        <div id="file-name" class="file-name">No file chosen</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="video_link">Video Link</label>
+                    <input type="url" id="video_link" name="video_link" placeholder="https://">
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-prev" data-prev="2"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn-next" data-next="4">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Section 4: Recommendations -->
+            <section class="form-section hidden" id="section4">
+                <h2>4. Recommendations</h2>
+                <div class="form-group">
+                    <label for="advice_given">Advice Given <span class="required">*</span></label>
+                    <textarea id="advice_given" name="advice_given" rows="5" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-prev" data-prev="3"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn-next" data-next="5">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Section 5: Follow Up -->
+            <section class="form-section hidden" id="section5">
+                <h2>5. Follow Up</h2>
+                <div class="form-group">
+                    <label>Is a follow up needed? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="follow_up_needed" value="Yes" required>
+                            <span class="radio-label">Yes</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="follow_up_needed" value="No">
+                            <span class="radio-label">No</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="proposedDateGroup">
+                    <label for="proposed_date">Proposed Date</label>
+                    <input type="date" id="proposed_date" name="proposed_date">
+                </div>
+                <div class="form-group">
+                    <label>Training Needed? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="training_needed" value="Yes" required>
+                            <span class="radio-label">Yes</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="training_needed" value="No">
+                            <span class="radio-label">No</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="referral">Referral to Vet/Agronomist</label>
+                    <input type="text" id="referral" name="referral">
+                </div>
+                <div class="form-group">
+                    <label for="additional_notes">Additional Notes</label>
+                    <textarea id="additional_notes" name="additional_notes" rows="4"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-prev" data-prev="4"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="submit" class="btn-submit"><i class="fas fa-check-circle"></i> Submit</button>
+                </div>
+            </section>
+        </form>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="/admin" class="footer-link"><i class="fas fa-tractor"></i> Admin Dashboard</a>
+            <a href="/troubleshoot" class="footer-link"><i class="fas fa-wrench"></i> Troubleshooting</a>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Visit Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        .report-header h1 {
+            color: #2E7D32;
+            margin-bottom: 5px;
+        }
+        .report-section {
+            margin-bottom: 25px;
+        }
+        .report-section h2 {
+            color: #2E7D32;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 200px;
+            flex-shrink: 0;
+        }
+        .detail-value {
+            flex-grow: 1;
+        }
+        .visit-photo {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+        .visit-type {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .routine {
+            background-color: #E3F2FD;
+            color: #1565C0;
+        }
+        .emergency {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        .followup {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <h1>Farm Visit Report</h1>
+        <p>Generated on {{ visit.timestamp[:10] }}</p>
+    </div>
+
+    <div class="visit-type {{ visit.visit_type|lower }}">
+        {{ visit.visit_type }} Visit
+    </div>
+
+    <div class="report-section">
+        <h2>Farmer Details</h2>
+        <div class="detail-row">
+            <div class="detail-label">Farmer Name:</div>
+            <div class="detail-value">{{ visit.farmer_name }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Farm ID:</div>
+            <div class="detail-value">{{ visit.farm_id }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Phone Number:</div>
+            <div class="detail-value">{{ visit.phone_number }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Village/Location:</div>
+            <div class="detail-value">{{ visit.location }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">GPS Coordinates:</div>
+            <div class="detail-value">{{ visit.gps_coordinates }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Farm Size:</div>
+            <div class="detail-value">{{ visit.farm_size }} acres</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Farm Type:</div>
+            <div class="detail-value">{{ visit.farm_type }}</div>
+        </div>
+    </div>
+
+    <div class="report-section">
+        <h2>Visit Details</h2>
+        <div class="detail-row">
+            <div class="detail-label">Date of Visit:</div>
+            <div class="detail-value">{{ visit.visit_date }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Visit Type:</div>
+            <div class="detail-value">{{ visit.visit_type }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Officer Name:</div>
+            <div class="detail-value">{{ visit.officer_name }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Time Spent:</div>
+            <div class="detail-value">{{ visit.time_spent }} hours</div>
+        </div>
+    </div>
+
+    <div class="report-section">
+        <h2>Observations</h2>
+        {% if visit.farm_type == 'Crop' or visit.farm_type == 'Mixed' %}
+        <div class="detail-row">
+            <div class="detail-label">Main Crops:</div>
+            <div class="detail-value">{{ visit.main_crops }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Crop Stage:</div>
+            <div class="detail-value">{{ visit.crop_stage }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Crop Issues:</div>
+            <div class="detail-value">{{ visit.crop_issues }}</div>
+        </div>
+        {% endif %}
+        {% if visit.farm_type == 'Livestock' or visit.farm_type == 'Mixed' %}
+        <div class="detail-row">
+            <div class="detail-label">Livestock Type:</div>
+            <div class="detail-value">{{ visit.livestock_type }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Number of Animals:</div>
+            <div class="detail-value">{{ visit.animal_count }}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Livestock Issues:</div>
+            <div class="detail-value">{{ visit.livestock_issues }}</div>
+        </div>
+        {% endif %}
+        {% if visit.photo_path %}
+        <div class="detail-row">
+            <div class="detail-label">Farm Photo:</div>
+            <div class="detail-value">
+                <img src="file:///{{ visit.photo_path | replace('\\', '/') }}" alt="Farm photo" class="visit-photo">
+            </div>
+        </div>
+        {% endif %}
+        {% if visit.video_link %}
+        <div class="detail-row">
+            <div class="detail-label">Video Link:</div>
+            <div class="detail-value">{{ visit.video_link }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="report-section">
+        <h2>Recommendations</h2>
+        <div class="detail-row">
+            <div class="detail-label">Advice Given:</div>
+            <div class="detail-value">{{ visit.advice_given }}</div>
+        </div>
+    </div>
+
+    <div class="report-section">
+        <h2>Follow Up</h2>
+        <div class="detail-row">
+            <div class="detail-label">Follow-up Needed:</div>
+            <div class="detail-value">{{ visit.follow_up_needed }}</div>
+        </div>
+        {% if visit.follow_up_needed == 'Yes' %}
+        <div class="detail-row">
+            <div class="detail-label">Proposed Date:</div>
+            <div class="detail-value">{{ visit.proposed_date }}</div>
+        </div>
+        {% endif %}
+        <div class="detail-row">
+            <div class="detail-label">Training Needed:</div>
+            <div class="detail-value">{{ visit.training_needed }}</div>
+        </div>
+        {% if visit.referral %}
+        <div class="detail-row">
+            <div class="detail-label">Referral:</div>
+            <div class="detail-value">{{ visit.referral }}</div>
+        </div>
+        {% endif %}
+        {% if visit.additional_notes %}
+        <div class="detail-row">
+            <div class="detail-label">Additional Notes:</div>
+            <div class="detail-value">{{ visit.additional_notes }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>Farm Visit Report - ID: {{ visit.id }}</p>
+    </div>
+</body>
+</html>

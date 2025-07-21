@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Visit Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1><i class="fas fa-tractor"></i> Farm Visit Admin</h1>
+            <div class="header-actions">
+                <a href="/" class="btn-primary"><i class="fas fa-plus-circle"></i> New Visit</a>
+                <a href="/troubleshoot" class="btn-info"><i class="fas fa-wrench"></i> Troubleshoot</a>
+                <a href="/logout" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                    <button class="close-btn" onclick="this.parentElement.style.display='none';"><i class="fas fa-times"></i></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by farmer name or farm ID...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filter-box">
+                <label for="visitTypeFilter">Filter by Visit Type:</label>
+                <select id="visitTypeFilter">
+                    <option value="">All Types</option>
+                    <option value="Routine">Routine</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Followup">Follow-up</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="visits-container" id="visitsContainer">
+            {% if visits %}
+                {% for visit in visits %}
+                <div class="visit-card" data-visit-type="{{ visit.visit_type }}">
+                    <div class="visit-header">
+                        <div class="visit-type {{ visit.visit_type|lower }}">
+                            {{ visit.visit_type }}
+                        </div>
+                        <div class="visit-date">
+                            <i class="far fa-calendar-alt"></i> {{ visit.visit_date }}
+                        </div>
+                    </div>
+                    <div class="visit-body">
+                        <h3>{{ visit.farmer_name }}</h3>
+                        <div class="visit-details">
+                            <p><strong>Farm ID:</strong> {{ visit.farm_id }}</p>
+                            <p><strong>Location:</strong> {{ visit.location }}</p>
+                            <p><strong>Farm Type:</strong> {{ visit.farm_type }}</p>
+                            <p><strong>Officer:</strong> {{ visit.officer_name }}</p>
+                        </div>
+                        <div class="visit-actions">
+                            <button class="btn-view" onclick="toggleDetails('details-{{ visit.id }}')"><i class="fas fa-eye"></i> View Details</button>
+                            <a href="/download/{{ visit.id }}" class="btn-download"><i class="fas fa-file-pdf"></i> Download PDF</a>
+                        </div>
+                    </div>
+                    <div class="visit-details-expanded" id="details-{{ visit.id }}">
+                        <div class="details-section">
+                            <h4>Farmer Details</h4>
+                            <p><strong>Phone:</strong> {{ visit.phone_number }}</p>
+                            <p><strong>GPS Coordinates:</strong> {{ visit.gps_coordinates }}</p>
+                            <p><strong>Farm Size:</strong> {{ visit.farm_size }} acres</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Visit Details</h4>
+                            <p><strong>Time Spent:</strong> {{ visit.time_spent }} hours</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Observations</h4>
+                            {% if visit.farm_type == 'Crop' or visit.farm_type == 'Mixed' %}
+                            <p><strong>Main Crops:</strong> {{ visit.main_crops }}</p>
+                            <p><strong>Crop Stage:</strong> {{ visit.crop_stage }}</p>
+                            <p><strong>Crop Issues:</strong> {{ visit.crop_issues }}</p>
+                            {% endif %}
+                            {% if visit.farm_type == 'Livestock' or visit.farm_type == 'Mixed' %}
+                            <p><strong>Livestock Type:</strong> {{ visit.livestock_type }}</p>
+                            <p><strong>Number of Animals:</strong> {{ visit.animal_count }}</p>
+                            <p><strong>Livestock Issues:</strong> {{ visit.livestock_issues }}</p>
+                            {% endif %}
+                            {% if visit.photo_path %}
+                            <div class="photo-container">
+                                <img src="/{{ visit.photo_path }}" alt="Farm photo" class="visit-photo">
+                            </div>
+                            {% endif %}
+                            {% if visit.video_link %}
+                            <p><strong>Video Link:</strong> <a href="{{ visit.video_link }}" target="_blank">{{ visit.video_link }}</a></p>
+                            {% endif %}
+                        </div>
+                        <div class="details-section">
+                            <h4>Recommendations</h4>
+                            <p>{{ visit.advice_given }}</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Follow Up</h4>
+                            <p><strong>Follow-up Needed:</strong> {{ visit.follow_up_needed }}</p>
+                            {% if visit.follow_up_needed == 'Yes' %}
+                            <p><strong>Proposed Date:</strong> {{ visit.proposed_date }}</p>
+                            {% endif %}
+                            <p><strong>Training Needed:</strong> {{ visit.training_needed }}</p>
+                            {% if visit.referral %}
+                            <p><strong>Referral:</strong> {{ visit.referral }}</p>
+                            {% endif %}
+                            {% if visit.additional_notes %}
+                            <p><strong>Additional Notes:</strong> {{ visit.additional_notes }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-visits">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No farm visits recorded yet.</p>
+                    <a href="/" class="btn-primary">Create your first visit</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

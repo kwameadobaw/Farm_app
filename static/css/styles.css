@@ -1,0 +1,374 @@
+/* Main Styles for Farm Visit Form */
+:root {
+    --primary-color: #4CAF50;
+    --primary-dark: #2E7D32;
+    --primary-light: #A5D6A7;
+    --secondary-color: #FFC107;
+    --secondary-dark: #FFA000;
+    --error-color: #F44336;
+    --success-color: #4CAF50;
+    --text-color: #333;
+    --text-light: #757575;
+    --background-color: #F5F5F5;
+    --card-color: #FFFFFF;
+    --border-color: #E0E0E0;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+header p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+header h1 i {
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+/* Form Styles */
+form {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section h2 {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.required {
+    color: var(--error-color);
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* GPS Container */
+.gps-container {
+    display: flex;
+    gap: 10px;
+}
+
+.gps-container input {
+    flex-grow: 1;
+}
+
+/* Radio and Checkbox Styles */
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.radio-container,
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-container input,
+.checkbox-container input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.radio-label,
+.checkbox-label {
+    font-weight: normal;
+}
+
+/* File Upload Styles */
+.file-upload {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 10px;
+}
+
+.file-upload-label:hover {
+    background-color: var(--primary-dark);
+}
+
+.file-upload-label i {
+    margin-right: 8px;
+}
+
+.file-name {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Button Styles */
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-prev,
+.btn-next,
+.btn-submit,
+.btn-secondary {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-prev {
+    background-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-next,
+.btn-submit {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.btn-prev:hover {
+    background-color: #D5D5D5;
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-dark);
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 4px;
+    background-color: var(--primary-light);
+    width: 0%;
+    transition: width 0.3s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.step.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.step.completed {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-link {
+    color: var(--text-light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.footer-link:hover {
+    color: var(--primary-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+    }
+    
+    form {
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn-prev,
+    .btn-next,
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .radio-group,
+    .checkbox-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .gps-container {
+        flex-direction: column;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
